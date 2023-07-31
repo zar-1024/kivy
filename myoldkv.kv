@@ -1,0 +1,106 @@
+
+<MainWindow>
+    size: root.width, root.height
+    GridLayout:
+        rows: 9
+        cols: 1
+        size: root.width, root.height
+
+        GridLayout:
+            cols : 3
+
+            Button:
+                text: "1"
+
+            Button:
+                text: "2"
+
+            Button:
+                text: "3"
+
+
+        GridLayout:
+            cols: 1
+            Label:
+
+
+        GridLayout:
+            cols: 4
+            Label:
+
+            Label:
+                id: table_num_text
+                text: "Input Table Number:"
+
+            TextInput:
+                id: tab_num
+
+
+            Label:
+
+        GridLayout:
+            cols: 2
+            Label:
+                id: show_table_num
+
+
+        GridLayout:
+            cols: 1
+            Label:
+
+
+        GridLayout:
+            cols: 5
+            Label:
+
+            Spinner:
+                id: order_type_id
+                text: "Select Order Type"
+                values: root.order_type_list
+
+                on_press:
+                    root.table_num_input()
+
+                on_text: root.order_type(order_type_id.text)
+
+
+            Label:
+
+            Spinner:
+                id: order_id
+                text: "Select Order"
+
+                on_text: root.order_choice(order_id.text)
+
+
+            Label:
+
+        GridLayout:
+            cols: 5
+            Label:
+
+
+            Button:
+                text: "Add Order"
+                on_release:
+                    root.order_save()
+
+
+            Label:
+
+        GridLayout:
+            cols: 1
+            Label:
+
+
+        GridLayout:
+            cols: 3
+            Label:
+
+            Button:
+                text: "Submit Orders"
+                on_press:
+                    root.submit_orders()
+
+            Label:
+

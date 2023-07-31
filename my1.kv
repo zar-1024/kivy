@@ -1,0 +1,109 @@
+WindowManager:
+    MainWindow:
+    UpWindow:
+    DownWindow:
+    LeftWindow:
+    RightWindow:
+
+
+
+
+
+<MainWindow>
+    name: "MainWindow"
+    GridLayout:
+        cols : 3
+        Label:
+        Button:
+            text: "Up"
+            on_release:
+                app.root.current = "UpWindow" if password.text == "up" else root.btn()
+                root.manager.transition.direction = "down"
+        Label:
+        Button:
+            text: "Left"
+            on_release:
+                app.root.current = "LeftWindow" if password.text == "left" else root.btn()
+                root.manager.transition.direction = "right"
+        TextInput:
+            id : password
+            multiline: False
+            password : True
+        Button:
+            text: "Right"
+            on_release:
+                app.root.current = "RightWindow" if password.text == "right" else root.btn()
+                root.manager.transition.direction = "left"
+        Label:
+        Button:
+            text:"Down"
+            on_release:
+                app.root.current = "DownWindow" if password.text == "down" else root.btn()
+                root.manager.transition.direction = "up"
+        Label:
+
+<UpWindow>:
+    name: "UpWindow"
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        Label:
+            text: "u have gone up"
+        Button:
+            text: "Back"
+            on_release:
+                app.root.current = "MainWindow"
+                root.manager.transition.direction = "up"
+
+<DownWindow>
+    name: "DownWindow"
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        Label:
+            text: "u have gone down"
+        Button:
+            text: "Back"
+            on_release:
+                app.root.current = "MainWindow"
+                root.manager.transition.direction = "down"
+
+
+<LeftWindow>
+    name: "LeftWindow"
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        Label:
+            text: "u have gone left"
+        Button:
+            text: "Back"
+            on_release:
+                app.root.current = "MainWindow"
+                root.manager.transition.direction = "left"
+
+
+<RightWindow>
+    name: "RightWindow"
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        Label:
+            text: "u have gone right"
+        Button:
+            text: "Back"
+            on_release:
+                app.root.current = "MainWindow"
+                root.manager.transition.direction = "right"
+
+
+<Pop>:
+    name: "error_popup"
+    Label:
+        text : "u must enter the right password"
+        size_hint: 0.6, 0.2
+        pos_hint: {"x": 0.2, "top": 1}
+
+
+
+
