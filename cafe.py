@@ -1,16 +1,14 @@
-from openpyxl import load_workbook
-from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.lang import Builder
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.widget import Widget
 import datetime
+from kivy.app import App
+from kivy.lang import Builder
+from kivy.uix.widget import Widget
+from openpyxl import load_workbook
 
 wb = load_workbook("orders.xlsx")
 sheet_1 = wb['active_tables']
 sheet_2 = wb['todays_orders']
 
-class MainWindow(Widget):
+class AddOrders(Widget):
     order_type_list = ["Hot", "Cold", "Food"]
     order_choice = []
     order_list = []
@@ -46,7 +44,7 @@ class MainWindow(Widget):
 
 
     def order_choice(self, value):
-        global var_1, order_list
+        global var_1
         var_1 = value
 
     def order_save(self):
@@ -71,12 +69,12 @@ class MainWindow(Widget):
         self.ids.show_table_num.text = ""
 
 
-kv = Builder.load_file("myoldkv.kv")
+kv = Builder.load_file("cafeorders.kv")
 
 
 class myApp(App):
     def build(self):
-        return MainWindow()
+        return AddOrders()
 
 
 if __name__ == "__main__":
