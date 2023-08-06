@@ -1,106 +1,376 @@
-
+WindowManager:
+    AddOrders:
+    CheckoutPage:
+    ActiveTabsPage:
+    LogOutPage:
+#######################################################################################################################
+#######################################################################################################################
+#######################################################################################################################
 <AddOrders>
+    name: "AddOrders"
     size: root.width, root.height
     GridLayout:
         rows: 9
         cols: 1
         size: root.width, root.height
-
         GridLayout:
             cols : 3
-
             Button:
-                text: "1"
-
+                text: "Checkout"
+                on_press:
+                    app.root.current = "CheckoutPage"
+                    root.manager.transition.direction = "right"
+                    root.find_checkout_table()
+                    root.clear_everything()
+            GridLayout:
+                cols: 3
+                Label:
+                GridLayout:
+                    rows: 2
+                    Button:
+                        text: "Logout"
+                        on_press:
+                            app.root.current = "LogOutPage"
+                            root.manager.transition.direction = "up"
+                    Label:
+                Label:
             Button:
-                text: "2"
-
-            Button:
-                text: "3"
-
-
+                text: "Check Active Tabs"
+                on_press:
+                    app.root.current = "ActiveTabsPage"
+                    root.manager.transition.direction = "left"
+                    root.find_checkout_table()
+                    root.clear_everything()
         GridLayout:
             cols: 1
             Label:
-
-
         GridLayout:
             cols: 4
             Label:
-
+            GridLayout:
+                rows: 2
+                Label:
+                Label:
+                    id: table_num_text
+                    text: "Input Table Number:"
+            GridLayout:
+                rows:2
+                Label:
+                TextInput:
+                    id: tab_num
             Label:
-                id: table_num_text
-                text: "Input Table Number:"
-
-            TextInput:
-                id: tab_num
-
-
-            Label:
-
         GridLayout:
             cols: 2
             Label:
                 id: show_table_num
-
-
         GridLayout:
             cols: 1
             Label:
-
-
+                id: show_orders
         GridLayout:
-            cols: 5
-            Label:
-
+            cols: 4
             Spinner:
                 id: order_type_id
                 text: "Select Order Type"
                 values: root.order_type_list
-
                 on_press:
                     root.table_num_input()
-
                 on_text: root.order_type(order_type_id.text)
-
-
-            Label:
-
             Spinner:
                 id: order_id
                 text: "Select Order"
 
                 on_text: root.order_choice(order_id.text)
-
-
-            Label:
-
-        GridLayout:
-            cols: 5
-            Label:
-
-
             Button:
+                id: add_order_input
                 text: "Add Order"
                 on_release:
                     root.order_save()
-
-
+                    root.show_orders()
+            Button:
+                text: "Clear Orders"
+                on_press:
+                    root.clear_everything()
+        GridLayout:
+            cols: 4
             Label:
-
+            Spinner:
+                id: cancel_order_list
+                text: "Choose Order to Cancel"
+                on_press : root.cancel_order_list()
+            Button:
+                text: "Cancel Order"
+                on_press:
+                    root.cancel_order()
+                    root.show_orders()
+            Label:
+            Label:
         GridLayout:
             cols: 1
             Label:
-
-
         GridLayout:
             cols: 3
             Label:
-
             Button:
+                id: submit_order_input
                 text: "Submit Orders"
                 on_press:
                     root.submit_orders()
-
+                    root.clear_everything()
             Label:
 
+#######################################################################################################################
+#######################################################################################################################
+#######################################################################################################################
+
+<CheckoutPage>
+    name: "CheckoutPage"
+    GridLayout:
+        size: root.width, root.height
+        rows: 8
+        GridLayout:
+            cols: 8
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+            GridLayout:
+                rows : 2
+                Button:
+                    text: "Back"
+                    on_press:
+                        app.root.current = "AddOrders"
+                        root.manager.transition.direction = "left"
+                        root.clear_everything()
+                Label:
+        GridLayout:
+            cols: 5
+            Label:
+            GridLayout:
+                rows:2
+                Label:
+                Spinner:
+                    id: spinner_checkout_list
+                    text: "Choose Table for Checkout"
+                    on_press:
+                        root.create_active_tables_nums_list()
+                        root.spinner_checkout_list_show()
+            GridLayout:
+                rows:2
+                Label:
+                Button:
+                    id: checkout_submit_button
+                    text: "Submit"
+                    on_press:
+                        root.find_index_nums()
+                        root.create_order_list_for_checkout()
+                        root.create_eq_price_list()
+                        root.show_labels()
+            Label:
+        Label:
+            id: show_the_word_orders
+        Label:
+            id: show_order_list_string
+        Label:
+            id: show_grand_total
+        Label:
+        Label:
+        Button:
+            text: "Checkout"
+            disabled: True if (checkout_submit_button.disabled == False) else False
+            on_press:
+                root.input_checkout_append_list_to_sheet2()
+                root.delete_checkout_row_from_active()
+                root.create_receipt_orders()
+                root.create_receipt_list_mod()
+                root.create_unit_total_list()
+                root.create_receipt()
+                root.clear_everything()
+
+#######################################################################################################################
+#######################################################################################################################
+#######################################################################################################################
+
+<ActiveTabsPage>
+    name: "ActiveTabsPage"
+    GridLayout:
+        size: root.width, root.height
+        rows: 8
+        GridLayout:
+            cols: 8
+            GridLayout:
+                rows : 2
+                Button:
+                    text: "Back"
+                    on_press:
+                        app.root.current = "AddOrders"
+                        root.manager.transition.direction = "right"
+                        root.manager.get_screen("CheckoutPage").clear_everything()
+                        root.clear_everything()
+                Label:
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+        GridLayout:
+            cols: 4
+            Label:
+            GridLayout:
+                rows: 2
+                Label:
+                Spinner:
+                    id: spinner_check_active_list
+                    text: "Active Tables"
+                    on_press:
+                        root.clear_everything()
+                        root.create_active_tables_nums_list_check_active()
+                        root.manager.get_screen("CheckoutPage").spinner_checkout_list_show()
+                        root.spinner_fill()
+            GridLayout:
+                rows: 2
+                Label:
+                Button:
+                    id: submit_button
+                    text: "submit"
+                    on_press:
+                        root.create_index_nums_list()
+                        root.print_the_order_rows()
+                        root.spinner_delete_order()
+            Label:
+        GridLayout:
+            rows: 2
+            Spinner:
+                id:order_rows
+                text: ""
+                #on_press:
+                    #root.clear_everything()
+            Label:
+        Label:
+        GridLayout:
+            cols: 4
+            Label:
+            GridLayout:
+                rows: 2
+                Label:
+                Spinner:
+                    id: order_to_delete
+                    text: "Choose an Order To Delete"
+                    disabled: True
+            GridLayout:
+                rows: 2
+                Label:
+                Button:
+                    id: submit_deleting_order
+                    text: "Submit"
+                    disabled: True
+                    on_press:
+                        root.delete_order()
+                        root.clear_everything()
+                        root.create_index_nums_list()
+                        root.print_the_order_rows()
+                        root.spinner_delete_order()
+            Label:
+        Label:
+        Button:
+            text: "Clear"
+            on_press:
+                root.clear_everything()
+
+#######################################################################################################################
+#######################################################################################################################
+#######################################################################################################################
+
+<LogOutPage>
+    name: "LogOutPage"
+    size: root.width, root.height
+    GridLayout:
+        rows: 8
+        GridLayout:
+            cols: 3
+            Label:
+            GridLayout:
+                cols:3
+                Label:
+                GridLayout:
+                    rows: 2
+                    Button:
+                        text: "Back"
+                        on_press:
+                            root.clear_everything()
+                            app.root.current = "AddOrders"
+                            root.manager.transition.direction = "down"
+                    Label:
+                Label:
+            Label:
+        GridLayout:
+            rows: 2
+            Label:
+            Label:
+                text: 'Type "obl" Below To Confirm Logout'
+        GridLayout:
+            cols: 3
+            Label:
+            GridLayout:
+                rows: 2
+                TextInput:
+                    id: confirmation_text
+                GridLayout:
+                    cols: 3
+                    Label:
+                    Button:
+                        id: confirmation_button
+
+                        text: "Confirm"
+                        on_press:
+                            root.exit_function()
+                    Label:
+            Label:
+        Label:
+            id: error_clear_tables
+        Label:
+            id: grand_grand_total_text
+            #text: "row 5"
+        Label:
+            #text: "row 6"
+        GridLayout:
+            #text: "row 7"
+            cols: 3
+            GridLayout:
+                rows: 2
+                Label:
+                Button:
+                    id: go_to_checkout
+                    text: "Checkout"
+                    disabled: True if (exit_button.disabled == True) else False
+                    on_press:
+                        root.clear_everything()
+                        app.root.current = "CheckoutPage"
+                        root.manager.transition.direction = "right"
+            Label:
+            GridLayout:
+                rows: 2
+                Label:
+                Button:
+                    id: go_to_check_active
+                    text: "Check Active Tables"
+                    disabled: True if (exit_button.disabled == True) else False
+                    on_press:
+                        root.clear_everything()
+                        app.root.current = "ActiveTabsPage"
+                        root.manager.transition.direction = "left"
+        Button:
+            id: exit_button
+            text: "Exit"
+            disabled: True
+            on_press:
+                root.clear_sheet_2()
+            on_release:
+                app.stop()
+
+            #text: "row 8"
